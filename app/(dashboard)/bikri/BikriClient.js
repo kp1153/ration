@@ -32,12 +32,13 @@ export default function BikriClient({ grahakList, stockList, recentBikri }) {
       body: JSON.stringify({ grahak_id, prakar, bhugtan, items }),
     });
     const data = await res.json();
-    if (data.ok) {
+    if (data.ok && data.bill) {
       setBill(data.bill);
     }
   }
 
   function printBill() {
+    if (!bill || !bill.items) return;
     const w = window.open("", "_blank");
     const g = grahakList.find((g) => g.id == grahak_id);
     const rows = bill.items
@@ -82,9 +83,14 @@ export default function BikriClient({ grahakList, stockList, recentBikri }) {
       {bill ? (
         <div className="bg-white p-6 rounded-xl shadow max-w-lg">
           <h2 className="text-xl font-bold mb-4 text-green-700">✅ बिक्री हो गई — कुल ₹{bill.kul}</h2>
-          <button onClick={printBill} className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-            🖨️ रसीद प्रिंट करें
-          </button>
+          <div className="flex gap-3">
+            <button onClick={printBill} className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+              🖨️ रसीद प्रिंट करें
+            </button>
+            <button onClick={() => { setBill(null); router.refresh(); }} className="bg-gray-200 px-6 py-2 rounded hover:bg-gray-300">
+              नई बिक्री
+            </button>
+          </div>
         </div>
       ) : (
         <form onSubmit={handleSale} className="bg-white p-4 rounded-xl shadow mb-6 space-y-4">
