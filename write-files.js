@@ -1,4 +1,6 @@
-import { db, initDB } from "@/lib/db";
+const fs = require('fs');
+
+fs.writeFileSync('app/(dashboard)/report/page.js', `import { db, initDB } from "@/lib/db";
 
 export default async function ReportPage({ searchParams }) {
   await initDB();
@@ -117,3 +119,6 @@ export default async function ReportPage({ searchParams }) {
     </div>
   );
 }
+`, 'utf8');
+
+console.log("हो गया");
